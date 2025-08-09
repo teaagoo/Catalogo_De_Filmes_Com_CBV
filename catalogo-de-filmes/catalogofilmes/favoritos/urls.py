@@ -1,13 +1,13 @@
 from django.urls import path
 from . import views
 
-app_name = 'favoritos' 
+app_name = 'favoritos'
 
 urlpatterns = [
-    path('', views.minhas_listas, name='minhas_listas'),
-    path('criar/', views.criar_lista, name='criar_lista'),
-    path('<int:lista_id>/', views.detalhes_lista, name='detalhes_lista'),
-    path('<int:lista_id>/editar/', views.editar_lista, name='editar_lista'),
-    path('<int:lista_id>/deletar/', views.deletar_lista, name='deletar_lista'),
-    path('adicionar/<int:filme_id>/', views.adicionar_aos_favoritos, name='adicionar_aos_favoritos'),
+    path('', views.MinhasListasView.as_view(), name='minhas_listas'),
+    path('criar/', views.CriarListaView.as_view(), name='criar_lista'),
+    path('<int:lista_id>/', views.DetalhesListaView.as_view(), name='detalhes_lista'),
+    path('<int:lista_id>/editar/', views.EditarListaView.as_view(), name='editar_lista'),
+    path('<int:lista_id>/deletar/', views.DeletarListaView.as_view(), name='deletar_lista'),
+    path('adicionar/<int:filme_id>/', views.AdicionarAosFavoritosView.as_view(), name='adicionar_aos_favoritos'),
 ]

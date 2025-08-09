@@ -1,9 +1,11 @@
 from django.urls import path
-from . import views
+from .views import GeneroListView, GeneroCreateView, GeneroUpdateView, GeneroDeleteView
+
+app_name = 'genero'
 
 urlpatterns = [
-    path('', views.listar_generos, name='listar_generos'),
-    path('novo/', views.criar_genero, name='criar_genero'),
-    path('editar/<int:pk>/', views.editar_genero, name='editar_genero'),
-    path('deletar/<int:pk>/', views.deletar_genero, name='deletar_genero'),
+    path('', GeneroListView.as_view(), name='listar_generos'),
+    path('novo/', GeneroCreateView.as_view(), name='criar_genero'),
+    path('editar/<int:pk>/', GeneroUpdateView.as_view(), name='editar_genero'),
+    path('deletar/<int:pk>/', GeneroDeleteView.as_view(), name='deletar_genero'),
 ]

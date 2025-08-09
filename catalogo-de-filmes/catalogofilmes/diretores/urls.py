@@ -1,11 +1,18 @@
 from django.urls import path
-from . import views
+from .views import (
+    ListaDiretoresView, 
+    DetalharDiretorView, 
+    AdicionarDiretorView, 
+    EditarDiretorView, 
+    DeletarDiretorView
+)
 
 app_name = 'diretores'
+
 urlpatterns = [
-    path('', views.lista_diretores, name='lista_diretores'),
-    path('adicionar/', views.adicionar_diretor, name='adicionar_diretor'),
-    path('<int:id>/', views.detalhar_diretor, name='detalhar_diretor'),
-    path('<int:id>/editar/', views.editar_diretor, name='editar_diretor'),
-    path('<int:id>/deletar/', views.deletar_diretor, name='deletar_diretor'),
+    path('', ListaDiretoresView.as_view(), name='lista_diretores'),
+    path('adicionar/', AdicionarDiretorView.as_view(), name='adicionar_diretor'),
+    path('<int:id>/', DetalharDiretorView.as_view(), name='detalhar_diretor'),
+    path('<int:id>/editar/', EditarDiretorView.as_view(), name='editar_diretor'),
+    path('<int:id>/deletar/', DeletarDiretorView.as_view(), name='deletar_diretor'),
 ]

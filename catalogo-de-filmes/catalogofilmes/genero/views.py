@@ -1,37 +1,26 @@
-from django.shortcuts import render
-
-from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Genero
 from .forms import GeneroForm
 
-def listar_generos(request):
-    generos = Genero.objects.all()
-    return render(request, 'genero/listar.html', {'generos': generos})
+class GeneroListView(ListView):
+    model = Genero
+    template_name = 'genero/listar.html'
+    context_object_name = 'generos'
 
-def criar_genero(request):
-    if request.method == 'POST':
-        form = GeneroForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_generos')
-    else:
-        form = GeneroForm()
-    return render(request, 'genero/form.html', {'form': form})
+class GeneroCreateView(CreateView):
+    model = Genero
+    form_class = GeneroForm
+    template_name = 'genero/form.html'
+    success_url = reverse_lazy('genero:listar_generos')
 
-def editar_genero(request, pk):
-    genero = get_object_or_404(Genero, pk=pk)
-    if request.method == 'POST':
-        form = GeneroForm(request.POST, instance=genero)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_generos')
-    else:
-        form = GeneroForm(instance=genero)
-    return render(request, 'genero/form.html', {'form': form})
+class GeneroUpdateView(UpdateView):
+    model = Genero
+    form_class = GeneroForm
+    template_name = 'genero/form.html'
+    success_url = reverse_lazy('genero:listar_generos')
 
-def deletar_genero(request, pk):
-    genero = get_object_or_404(Genero, pk=pk)
-    if request.method == 'POST':
-        genero.delete()
-        return redirect('listar_generos')
-    return render(request, 'genero/confirmar_delete.html', {'genero': genero})
+class GeneroDeleteView(DeleteView):
+    model = Genero
+    template_name = 'genero/confirmar_delete.html'
+    success_url = reverse_lazy('genero:listar_generos')

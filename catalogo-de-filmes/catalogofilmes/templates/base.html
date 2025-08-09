@@ -80,7 +80,7 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{% url 'index' %}" class="nav-item nav-link">Início</a>
-                            <a href="{% url 'listar_generos' %}" class="nav-item nav-link">Gêneros</a>
+                            <a href="{% url 'genero:listar_generos' %}" class="nav-item nav-link">Gêneros</a>
                             <a href="{% url 'diretores:lista_diretores' %}" class="nav-item nav-link">Diretores</a>
                             {% if user.is_authenticated %}
                                 <div class="nav-item dropdown">
@@ -155,7 +155,7 @@
                             <a class="footer-text mb-2" href="{% url 'index' %}"><i class="bi bi-arrow-right footer-primary me-2"></i>Início</a>
                             <a class="footer-text mb-2" href="{% url 'diretores:lista_diretores' %}"><i class="bi bi-arrow-right footer-primary me-2"></i>Diretores</a>
                             <a class="footer-text mb-2" href="{% url 'favoritos:minhas_listas' %}"><i class="bi bi-arrow-right footer-primary me-2"></i>Minhas Listas</a>
-                            <a class="footer-text mb-2" href="{% url 'listar_generos' %}"><i class="bi bi-arrow-right footer-primary me-2"></i>Gêneros</a>
+                            <a class="footer-text mb-2" href="{% url 'genero:listar_generos' %}"><i class="bi bi-arrow-right footer-primary me-2"></i>Gêneros</a>
                             <a class="footer-text mb-2" href="{% url 'perfil' %}"><i class="bi bi-arrow-right footer-primary me-2"></i>Perfil</a>
                             <a class="footer-text" href="#"><i class="bi bi-arrow-right footer-primary me-2"></i>Contato</a>
                         </div>

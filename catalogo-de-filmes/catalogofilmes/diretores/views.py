@@ -1,63 +1,49 @@
-from django.shortcuts import render
-from django.shortcuts import render, get_object_or_404 
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from .models import Diretor
 from .forms import DiretorForm
 from usuarios.decorators import admin_required, user_required
 
 
-@user_required 
-def lista_diretores(request):
-    """Lista todos os diretores."""
-    diretores = Diretor.objects.all().order_by('nome') # Busca todos os diretores, ordenados por nome
-    context = {'diretores': diretores}
-    return render(request, 'diretores/lista_diretores.html', context)
+@method_decorator(user_required, name='dispatch')
+class ListaDiretoresView(ListView):
+    model = Diretor
+    template_name = 'diretores/lista_diretores.html'
+    context_object_name = 'diretores'
+    ordering = ['nome']
 
 
-@user_required 
-def detalhar_diretor(request, id):
-    """Mostra os detalhes de um diretor específico."""
-    diretor = get_object_or_404(Diretor, pk=id) 
-    context = {'diretor': diretor}
-    return render(request, 'diretores/detalhes_diretor.html', context)
+@method_decorator(user_required, name='dispatch')
+class DetalharDiretorView(DetailView):
+    model = Diretor
+    template_name = 'diretores/detalhes_diretor.html'
+    pk_url_kwarg = 'id'  # Aqui você fala que o parâmetro da URL é 'id'
+    context_object_name = 'diretor'
 
 
-@admin_required
-def adicionar_diretor(request):
-    """Permite adicionar um novo diretor."""
-    if request.method != 'POST':
-        form = DiretorForm()
-    else:
-        form = DiretorForm(request.POST, request.FILES) 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('diretores:lista_diretores')) 
-
-    context = {'form': form}
-    return render(request, 'diretores/adicionar_diretor.html', context)
+@method_decorator(admin_required, name='dispatch')
+class AdicionarDiretorView(CreateView):
+    model = Diretor
+    form_class = DiretorForm
+    template_name = 'diretores/adicionar_diretor.html'
+    success_url = reverse_lazy('diretores:lista_diretores')
 
 
-@admin_required 
-def editar_diretor(request, id):
-    """Permite editar um diretor existente."""
-    diretor = get_object_or_404(Diretor, pk=id) 
+@method_decorator(admin_required, name='dispatch')
+class EditarDiretorView(UpdateView):
+    model = Diretor
+    form_class = DiretorForm
+    template_name = 'diretores/editar_diretor.html'
+    pk_url_kwarg = 'id'
 
-    if request.method != 'POST':
-        form = DiretorForm(instance=diretor)
-    else:
-        form = DiretorForm(request.POST, request.FILES, instance=diretor) 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('diretores:detalhar_diretor', args=[diretor.id])) 
-
-    context = {'form': form, 'diretor': diretor}
-    return render(request, 'diretores/editar_diretor.html', context)
+    def get_success_url(self):
+        return reverse_lazy('diretores:detalhar_diretor', kwargs={'id': self.object.id})
 
 
-@admin_required 
-def deletar_diretor(request, id):
-    """Permite deletar um diretor."""
-    diretor = get_object_or_404(Diretor, pk=id) 
-    diretor.delete()
-    return HttpResponseRedirect(reverse('diretores:lista_diretores')) 
+@method_decorator(admin_required, name='dispatch')
+class DeletarDiretorView(DeleteView):
+    model = Diretor
+    template_name = 'diretores/deletar_diretor.html'  # Se quiser confirmação antes de deletar
+    pk_url_kwarg = 'id'
+    success_url = reverse_lazy('diretores:lista_diretores')
